@@ -1,0 +1,25 @@
+-- Create a table for items sold at a bike shop --
+CREATE TABLE bikeshop (Item_Id INTEGER PRIMARY KEY, Item_Name TEXT, Color TEXT, Categroy TEXT, Price INTEGER);
+
+-- Insert item data --
+INSERT INTO bikeshop VALUES(1, "Mountain Bicycle", "black", "bicycle", 1399);
+INSERT INTO bikeshop VALUES(2, "Road Bicycle", "white", "bicycle", 2325);
+INSERT INTO bikeshop VALUES(3, "Hybrid Bicycle", "silver", "bicycle", 960);
+INSERT INTO bikeshop VALUES(4, "Cruiser Bicycle", "blue", "bicycle", 400);
+INSERT INTO bikeshop VALUES(5, "Electric Bike", "grey", "bicycle", 1299);
+INSERT INTO bikeshop VALUES(6, "Kids' Bike", "orange", "bicycle", 599);
+INSERT INTO bikeshop VALUES(7, "Adult Mens Helmet", "dark blue", "bicycle helmet", 50);
+INSERT INTO bikeshop VALUES(8, "Adult Womens Helmet", "light blue", "bicycle helmet", 50);
+INSERT INTO bikeshop VALUES(9, "Kids' Helmet", "green", "bicycle helmet", 40);
+INSERT INTO bikeshop VALUES(10, "Bike light", "black", "bicycle accessories", 35);
+INSERT INTO bikeshop VALUES(11, "Smartphone Bar Mount", "grey", "bicycle accessories", 26);
+INSERT INTO bikeshop VALUES(12, "Front Bike Basket", "white", "bicycle accessories", 60);
+INSERT INTO bikeshop VALUES(13, "Womens' Bike Liner Shorts", "black", "bicycle accessories", 50);
+INSERT INTO bikeshop VALUES(14, "Road Cycling Shoes", "black", "bicycle shoes", 100);
+INSERT INTO bikeshop VALUES(15, "Bike Bell", "gold", "bicycle accessories", 15);
+
+-- Order your items by price --
+SELECT * FROM bikeshop ORDER BY price;
+
+-- The average price of items sold --
+SELECT ROUND(AVG(price)) AS Average_Price FROM bikeshop
