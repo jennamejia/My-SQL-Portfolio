@@ -1,0 +1,40 @@
+/* Create table about the people and what they do here */
+
+CREATE TABLE famous_people (name TEXT, profession TEXT, famous_work TEXT, birth_country TEXT);
+
+INSERT INTO famous_people VALUES("Jimmy Brown", "musician", "Two Things", "Korea");
+INSERT INTO famous_people VALUES("Dua Lipa", "musician", "New Rules", "United Kingdom");
+INSERT INTO famous_people VALUES("Cillian Murphy", "actor", "Oppenheimer", "Ireland");
+INSERT INTO famous_people VALUES("Margot Robbie", "actor", "Barbie", "Australia");
+INSERT INTO famous_people VALUES("Elon Musk", "CEO", "Tesla Motors", "South Africa");
+INSERT INTO famous_people VALUES("Messi", "athlete", "FC Barcelona", "Argentina");
+
+SELECT *
+FROM famous_people;
+
+/* Create another table */
+
+CREATE TABLE people_age (name TEXT, marital_status TEXT, children INTEGER, age INTEGER);
+
+INSERT INTO people_age VALUES("Jimmy Brown", "not married", 0, 32);
+INSERT INTO people_age VALUES("Dua Lipa", "not married", 0, 28);
+INSERT INTO people_age VALUES("Cillian Murphy", "married", 2, 45); 
+INSERT INTO people_age VALUES("Margot Robbie", "married", 0, 32); 
+INSERT INTO people_age VALUES("Elon Musk", "not married", 6, 52); 
+INSERT INTO people_age VALUES("Messi", "married", 3, 36); 
+
+SELECT *
+FROM people_age;
+
+/* Join the tables */
+
+SELECT t1.name,
+    t1.profession,
+    t1.birth_country,
+    t2.marital_status,
+    t2.children,
+    t2.age
+FROM famous_people AS t1
+LEFT OUTER JOIN people_age AS t2
+ON t1.name = t2.name;
+
