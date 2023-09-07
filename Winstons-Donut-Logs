@@ -4,6 +4,7 @@ This table of logs shows how many donuts Winston eats at each year of his life,
 plus any particular reason to explain his eating habits.
 Collected by: https://www.khanacademy.org/profile/mhogwarts/
  */
+
 CREATE TABLE winstons_donut_logs (
     id TEXT PRIMARY KEY,
     status TEXT,
