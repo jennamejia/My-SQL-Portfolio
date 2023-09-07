@@ -1,4 +1,4 @@
-/* Create table about the people and what they do here */
+/* Create table about famous people and what they do here */
 
 CREATE TABLE famous_people (name TEXT, profession TEXT, famous_work TEXT, birth_country TEXT);
 
@@ -12,7 +12,7 @@ INSERT INTO famous_people VALUES("Messi", "athlete", "FC Barcelona", "Argentina"
 SELECT *
 FROM famous_people;
 
-/* Create another table */
+/* Create another table sharing more information about the people */
 
 CREATE TABLE people_age (name TEXT, marital_status TEXT, children INTEGER, age INTEGER);
 
