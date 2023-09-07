@@ -112,5 +112,5 @@ FROM winstons_donut_logs
 WHERE years_old >= 40 AND reason != 'Non-healthy eating' AND reason != 'No diet';
 
 /*
-Besides having no diet or non-healthy eating habits, the amount of donuts Winston has eaten over the age of 40 years old either had no reason, or were due to being on a diet or his current age.
+Besides having no diet or non-healthy eating habits, the amount of donuts Winston has eaten over the age of 40 years old either had no reason, or were due to him being on a diet or his current age.
 */
