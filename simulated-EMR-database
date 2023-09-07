@@ -1,0 +1,141 @@
+/* 
+A simulated EMR patient database with multiple tables regarding patient information, conditions, encounters, and immunizations
+
+SQL tables from Data Wizardry: https://github.com/Data-Wizardry/SQL-Webinar-1 
+Data collected from Synthea through Data Wizardry: https://datawizardry.academy/sql-basics-healthcare/
+*/
+
+
+-- First, I gathered insights regarding patient demographics, such as age, race, gender, and birthplace--
+/* A list of patients based on race */
+SELECT race,
+	COUNT(*)
+FROM public.patients
+GROUP BY race
+ORDER BY COUNT(*) DESC;
+
+/* A list of the number of patients per age (__ years old) */
+SELECT EXTRACT(YEAR FROM AGE(birthdate)) AS years_old,
+	COUNT(*)
+FROM public.patients
+GROUP BY years_old
+ORDER BY years_old;
+
+/* A list including a column of the age group of each patient (0-18, 18-65, or 65+) */
+SELECT birthdate,
+    AGE(birthdate) AS age,
+    CASE
+        WHEN EXTRACT(YEAR FROM AGE(birthdate)) >= 65 THEN '65+'
+		WHEN EXTRACT(YEAR FROM AGE(birthdate)) >= 18 THEN '18-65'
+        ELSE '0-18'
+    END AS
+		age_group
+FROM public.patients;
+
+/* A list of cities in descending order, in which there are more than 200 patients residing */
+SELECT city,
+	COUNT(*)
+FROM public.patients
+GROUP BY city
+HAVING COUNT(*) >= 100
+ORDER BY COUNT(*) DESC;
+
+/* Given that Boston is the most populated city, I queried a similar list of cities excluding Boston */
+SELECT city,
+	COUNT(*)
+FROM public.patients
+WHERE city != 'Boston'
+GROUP BY city
+HAVING COUNT(*) >= 100
+ORDER BY COUNT(*) DESC;
+
+/* A list of patients' races whose income is greater than or equal to $150,000  */
+SELECT race,
+	COUNT(*) 
+FROM public.patients
+WHERE income >= 150000
+GROUP BY race
+ORDER BY COUNT(*) DESC;
+
+/* A list of COVID-19 immunizations from 2020-2023 in each city */
+SELECT t2.city,
+	COUNT(*)
+FROM public.immunizations AS t1
+LEFT JOIN public.patients AS t2
+		ON t1.patient = t2.id
+WHERE t1.description LIKE '%Coronavirus%'
+GROUP BY t2.city
+ORDER BY COUNT(*) DESC;
+
+/* A list of urgent care encounters and patient ages */
+SELECT t2.birthdate,
+	t1.id,
+	t1.start,
+	t1.stop,
+	t1.patient,
+	t1.encounterclass
+FROM public.encounters AS t1
+LEFT JOIN public.patients AS t2
+    ON t1.patient = t2.id
+WHERE t1.encounterclass = 'urgentcare'
+ORDER BY EXTRACT(YEAR FROM birthdate) DESC
+
+
+-- I then gathered insights about the frequency of different patient encounter class (such as urgent care, wellness, outpatient, ambulatory, etc.), as well as patient desccriptions --
+/* All patient encounters in 2023, that were inpatient and ICU admissions */
+SELECT *
+FROM public.encounters
+WHERE encounterclass = 'inpatient'
+	AND description = 'ICU Admission'
+	AND stop BETWEEN '2023-01-01 00:00:00' AND '2023-12-31 12:59:59';
+
+/* The number of patient visits per encounter class */
+SELECT encounterclass,
+	COUNT(*) AS count_of_encounterclass
+FROM public.encounters
+GROUP BY encounterclass
+ORDER BY COUNT(*) DESC;
+
+/* Patient descriptions that were recorded more than 5000 times */
+SELECT description,
+	COUNT(*) AS count_of_cond
+FROM public.conditions
+GROUP BY description
+HAVING COUNT(*) > 5000
+ORDER BY COUNT(*) DESC;
+
+
+-- Finally, I gathered insights regarding immunizations and specific COVID-19 information --
+/* A joined table of immunizations and patient names/birthdates */
+SELECT t1.*,
+	t2.first,
+	t2.last,
+	t2.birthdate
+FROM public.immunizations AS t1
+LEFT JOIN public.patients AS t2
+		ON t1.patient = t2.id;
+
+/* A list of immunizations given to patients in descending order */
+SELECT description,
+	COUNT(*)
+FROM public.immunizations
+GROUP BY description
+ORDER BY COUNT(*) DESC;
+
+/* A list of patient COVID-19 immunizations and descriptions of patient conditions in 2020-2022 */
+SELECT t1.*,
+	t2.code,
+	t2. description
+FROM public.immunizations AS t1
+LEFT JOIN public.conditions AS t2
+		ON t1.patient = t2.patient
+WHERE t1.date BETWEEN '2020-01-01 00:00:00' AND '2022-12-31 12:59:59'
+		AND t1.description LIKE '%Coronavirus%';
+
+/* A descending list of the number of COVID-19 immunizations in each year from 2020-2023 */
+SELECT EXTRACT(YEAR FROM date) AS date_year,
+	COUNT(*)
+FROM public.immunizations
+WHERE description LIKE '%Coronavirus%'
+GROUP BY date_year
+ORDER BY COUNT(*) DESC;
