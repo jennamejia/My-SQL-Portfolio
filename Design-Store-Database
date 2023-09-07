@@ -1,7 +1,10 @@
 -- Create a table for items sold at a bike shop --
+
 CREATE TABLE bikeshop (Item_Id INTEGER PRIMARY KEY, Item_Name TEXT, Color TEXT, Categroy TEXT, Price INTEGER);
 
+
 -- Insert item data --
+
 INSERT INTO bikeshop VALUES(1, "Mountain Bicycle", "black", "bicycle", 1399);
 INSERT INTO bikeshop VALUES(2, "Road Bicycle", "white", "bicycle", 2325);
 INSERT INTO bikeshop VALUES(3, "Hybrid Bicycle", "silver", "bicycle", 960);
@@ -18,8 +21,12 @@ INSERT INTO bikeshop VALUES(13, "Womens' Bike Liner Shorts", "black", "bicycle a
 INSERT INTO bikeshop VALUES(14, "Road Cycling Shoes", "black", "bicycle shoes", 100);
 INSERT INTO bikeshop VALUES(15, "Bike Bell", "gold", "bicycle accessories", 15);
 
+
 -- Order your items by price --
+
 SELECT * FROM bikeshop ORDER BY price;
 
+
 -- The average price of items sold --
+
 SELECT ROUND(AVG(price)) AS Average_Price FROM bikeshop
