@@ -1,5 +1,5 @@
 /* 
-A simulated EMR patient database with multiple tables regarding patient information, conditions, encounters, and immunizations
+For this SQL project, I queried a simulated EMR patient database to gather insights reagrding patient demographics, encounters, immunizations, and COVID-19.
 
 SQL tables from Data Wizardry: https://github.com/Data-Wizardry/SQL-Webinar-1 
 Data collected from Synthea through Data Wizardry: https://datawizardry.academy/sql-basics-healthcare/
@@ -7,6 +7,7 @@ Data collected from Synthea through Data Wizardry: https://datawizardry.academy/
 
 
 -- First, I gathered insights regarding patient demographics, such as age, race, gender, and birthplace--
+
 /* A list of patients based on race */
 SELECT race,
 	COUNT(*)
@@ -82,6 +83,7 @@ ORDER BY EXTRACT(YEAR FROM birthdate) DESC
 
 
 -- I then gathered insights about the frequency of different patient encounter class (such as urgent care, wellness, outpatient, ambulatory, etc.), as well as patient desccriptions --
+
 /* All patient encounters in 2023, that were inpatient and ICU admissions */
 SELECT *
 FROM public.encounters
@@ -106,6 +108,7 @@ ORDER BY COUNT(*) DESC;
 
 
 -- Finally, I gathered insights regarding immunizations and specific COVID-19 information --
+
 /* A joined table of immunizations and patient names/birthdates */
 SELECT t1.*,
 	t2.first,
