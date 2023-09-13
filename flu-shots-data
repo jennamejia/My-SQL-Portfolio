@@ -1,0 +1,56 @@
+/* 
+For this SQL project, I queried a simulated EMR patient database to gather insights reagrding patient demographics, encounters, immunizations, and COVID-19.
+
+Data collected from Synthea through Data Wizardry: https://datawizardry.academy/sql-basics-healthcare/
+
+Objectives: Conduct flu shots dashboard for 2022 that does the following:
+
+1.) Total % of patients getting flu shots stratifies by:
+	a.) Age
+	b.) Race
+	c.) County (On a Map)
+	d.) Overall
+2.) Running total number of flu shots over the course of 2022
+3.) Total number of flu shots given in 2022
+4.) A list of patients showing whether or not they received the flu shots
+
+Requirements:
+Patients must have been "Active at our hospital"
+*/
+
+WITH active_patients AS
+(
+	SELECT DISTINCT patient
+	FROM encounters AS e
+	JOIN patients AS pat
+		ON e.patient = pat.id
+	WHERE START BETWEEN '2020-01-01 00:00' AND '2022-12-31 23:59'
+		AND pat.deathdate IS null
+		AND EXTRACT(month FROM age('2022-12-31', pat.birthdate)) >= 6
+),
+
+flu_shot_2022 AS
+(
+SELECT patient, MIN(date) AS earliest_flu_shot_2022
+FROM immunizations
+WHERE code = '5302'
+	AND date BETWEEN '2022-01-01 00:00' AND '2022-12-31 23:59'
+GROUP BY patient
+)
+
+SELECT pat.birthdate
+	,EXTRACT(YEAR FROM age('2022-12-31',pat.birthdate)) as age
+	,pat.race
+	,pat.county
+	,pat.id
+	,pat.first
+	,pat.last
+	,flu.earliest_flu_shot_2022
+	, CASE WHEN flu.patient IS NOT null THEN 1
+		ELSE 0
+		END AS flu_shot_2022
+FROM patients AS pat
+LEFT JOIN flu_shot_2022 AS flu
+	ON pat.id = flu.patient
+WHERE 1=1
+	AND pat.id IN (SELECT patient FROM active_patients)
