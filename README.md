@@ -1,1 +1,7 @@
-# My-SQL-Portfolio
+# Jenna Mejia's SQL Portfolio
+Hello! This repository contains examples of SQL I've written for solo projects while working with PostgreSQL and other data analytics courses. Feel free to take a look around and [reach out ](www.linkedin.com/in/jennamejia) if you have any feedback or questions.
+
+## Highlighted Projects
+- **Winston's Donut Logs** - [SQL](https://github.com/jennamejia/My-SQL-Portfolio/blob/main/Winstons-Donut-Logs): In this project, I used a dataset from the Khan Academy: Querying and Managing Data course analyze trends in the number of donuts Winston has eaten in his lifetime.
+- **Simulated EMR Database**- [SQL](https://github.com/jennamejia/My-SQL-Portfolio/blob/main/simulated-EMR-database): In this project, I queried a simulated EMR patient database from Synthea to gather insights regarding patient demographics, encounters, immunizations, and COVID-19. I also used Data Wizardy's [SQL tables](https://github.com/Data-Wizardry/SQL-Webinar-1 ) to gather insights about patient age, race, gender, and birthplace, the frequency of different patient encounter class (such as urgent care, wellness, outpatient, ambulatory, etc.), as well as patient encounter descriptions. I then gathered insights about immunizations and specific COVID-19 information.
+- **Flu Shots Data**- [SQL](https://github.com/jennamejia/My-SQL-Portfolio/blob/main/flu-shots-data): In this project, I queried the same simulated EMR patient database to conduct a Flu Shots dashboard for 2022 that provides information about a set of specific criteria (i.e. stratified percentages of patients getting flu shots, running total number of flu shots in 2022, list of patients who have/have not received their flu shot in 2022, etc.)
