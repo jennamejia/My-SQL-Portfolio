@@ -1,0 +1,83 @@
+/*
+For this project I used New York Times' Covid-19 Data from 2020-2021 to gather state-level insights in the US.
+
+Data from The New York Times, based on reports from state and local health agencies: https://github.com/nytimes/covid-19-data
+*/
+
+/* How would you count the number of times California has appeared in the dataset? */
+select
+	count(state) as california_count
+from us_states_covid
+where state = 'California';
+
+/* How would you not include California and Nebraska in this list? */
+select *
+from us_states_covid
+where not state = 'California'
+and not state = 'Nebraska';
+
+/* Which states have the most positive COVID case to the least? */
+select
+	state,
+	sum(cases) as total_case_count
+from us_states_covid
+group by us_states_covid.state
+order by total_case_count desc
+
+/* How would you limit to the top five states from the previous question? */
+select
+	state,
+	sum(cases) as total_case_count
+from us_states_covid
+group by us_states_covid.state
+order by total_case_count desc
+limit 5
+
+/* I decided to additionally gather insights on a dataset containing county-level information.  */
+select * from us_counties_covid
+
+/* I queried an inner join to view all columns matched by state name */
+select *
+from us_states_covid as a 
+left join us_counties_covid as b
+on a.state = b.state;
+
+/* I combined the 'county' and 'state' columns to form one column in the counties table */
+select
+	date,
+	concat(county, ', ', state) as county_state,
+	fips,
+	cases,
+	deaths
+from us_counties_covid
+;
+
+/* Which counties have the most positive COVID case to the least? */
+select
+	county,
+	sum(cases) as total_case_count
+from us_counties_covid
+group by us_counties_covid.county
+order by total_case_count desc;
+
+/* Which counties, specifically in California, have the most positive COVID case to the least? */
+select
+	county,
+	sum(cases) as total_case_count
+from us_counties_covid
+where county in (select county
+	   from us_counties_covid
+	   where state = 'California')
+group by us_counties_covid.county
+order by total_case_count desc;
+
+/*  What are the top 10 counties that have the highest average number of positive COVID cases? */
+select 
+	county,
+	round(avg(cases), 0) as total_case_count
+from us_counties_covid
+group by us_counties_covid.county
+order by total_case_count desc
+limit 10;
+
+
