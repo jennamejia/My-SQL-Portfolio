@@ -4,10 +4,9 @@
 SELECT
   CITY,
   STATE
-FROM
-  STATION;
-/* Query the following two values from the STATION table:
+FROM STATION;
 
+/* Query the following two values from the STATION table:
 The sum of all values in LAT_N rounded to a scale of  decimal places.
 The sum of all values in LONG_W rounded to a scale of  decimal places. */
 SELECT
@@ -18,15 +17,13 @@ FROM STATION;
 /* Query a list of CITY names from STATION for cities that have an even ID number. Print the results in any order, but exclude duplicates from the answer. */
 SELECT
   DISTINCT CITY
-FROM
-  STATION
+FROM STATION
 WHERE MOD(ID, 2) = 0;
 
 /* Find the difference between the total number of CITY entries in the table and the number of distinct CITY entries in the table. */
 SELECT
   COUNT(CITY)-COUNT(DISTINCT CITY) AS Difference
-FROM
-  STATION
+FROM STATION
 
 /* Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths (i.e.: number of characters in the name). If there is more than one smallest or largest city, choose the one that comes first when ordered alphabetically. */
 SELECT
@@ -34,24 +31,22 @@ SELECT
   LEN(MIN(CITY)) AS shortest_length,
   MAX(CITY) AS longest,
   LEN(MAX(CITY)) AS longest_length
-FROM
-  STATION
+FROM STATION
 ORDER BY NAME
 
 /* Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths (i.e.: number of characters in the name). If there is more than one smallest or largest city, choose the one that comes first when ordered alphabetically. */
 SELECT
   CITY,
   LENGTH(CITY)
-FROM
-  STATION
+FROM STATION
 ORDER BY
-  Length(CITY) asc, CITY
+  Length(CITY) asc,
+  CITY
 LIMIT 1; 
 SELECT
   CITY,
   LENGTH(CITY)
-FROM
-  STATION
+FROM STATION
 ORDER BY
   Length(CITY) desc,
   CITY
@@ -60,42 +55,53 @@ LIMIT 1;
 /* Query the list of CITY names from STATION that either do not start with vowels or do not end with vowels. Your result cannot contain duplicates. */
 SELECT
   DISTINCT CITY
-FROM
-  STATION
+FROM STATION
 WHERE NOT LEFT (CITY, 1) IN ('A','E','I','O','U')
 OR NOT RIGHT (CITY, 1) IN ('a','e','i','o','u');
 
-/* Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than  and less than . Truncate your answer to  decimal places. */
+/* Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than  and less than . Truncate your answer to 4 decimal places. */
 SELECT
   ROUND(SUM(LAT_N),4)
-FROM
-  STATION
-WHERE
-  LAT_N BETWEEN 38.7880 AND 137.2345;
+FROM STATION
+WHERE LAT_N BETWEEN 38.7880 AND 137.2345;
 
-/* Query the greatest value of the Northern Latitudes (LAT_N) from STATION that is less than . Truncate your answer to  decimal places. */
+/* Query the greatest value of the Northern Latitudes (LAT_N) from STATION that is less than . Truncate your answer to  4 decimal places. */
 SELECT
     ROUND(MAX(LAT_N), 4)
-FROM
-  STATION
-WHERE
-  LAT_N < 137.2345;
+FROM STATION
+WHERE LAT_N < 137.2345;
 
-/* Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) in STATION that is less than . Round your answer to  decimal places. */
+/* Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) in STATION that is less than 137.2345. Round your answer to  decimal places. */
 SELECT
   ROUND(LONG_W, 4)
-FROM
-  STATION
-WHERE
-  LAT_N < 137.2345
-ORDER BY
-  LAT_N DESC
-LIMIT 1;
+FROM STATION
+WHERE LAT_N = (SELECT MAX(LAT_N) FROM STATION WHERE LAT_N < 137.2345);
 
-/* continued */
+/* Query the Western Longitude (LONG_W) where the smallest Northern Latitude (LAT_N) in STATION is greater than 38.7780. Round your answer to  decimal places. */
+SELECT
+  ROUND(LONG_W,4)
+FROM STATION
+WHERE LAT_N = (SELECT MIN(LAT_N) FROM STATION WHERE LAT_N > 38.7780);
 
+/* Consider P1(a,b) and P2(c,d) to be two points on a 2D plane.
+ a happens to equal the minimum value in Northern Latitude (LAT_N in STATION).
+ b happens to equal the minimum value in Western Longitude (LONG_W in STATION).
+ c happens to equal the maximum value in Northern Latitude (LAT_N in STATION).
+ d happens to equal the maximum value in Western Longitude (LONG_W in STATION).
+Query the Manhattan Distance between points  and  and round it to a scale of 4 decimal places. */
+SELECT
+  ROUND(ABS(MIN(LAT_N) - MAX(LAT_N)) + ABS(MAX(LONG_W) - MIN(LONG_W)),4)
+FROM STATION;
 
+/* Consider P1(a,c) and P2(b,d) to be two points on a 2D plane where (a,b) are the respective minimum and maximum values of Northern Latitude (LAT_N) and (c,d) are the respective minimum and maximum values of Western Longitude (LONG_W) in STATION.
+Query the Euclidean Distance between points P1 and P2 and format your answer to display 4 decimal digits. */
+SELECT
+  ROUND(SQRT(POW(MIN(LAT_N)-MAX(LAT_N),2)+POW(MIN(LONG_W)-MAX(LONG_W),2)),4)
+FROM STATION;
 
-
-
-
+/* A median is defined as a number separating the higher half of a data set from the lower half. Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to 4 decimal places. */
+SELECT
+  ROUND(S1.LAT_N,4)
+FROM STATION AS S1
+WHERE(SELECT ROUND(COUNT(S1.ID)/2)-1 FROM STATION) =
+(SELECT COUNT(S2.ID) FROM STATION AS S2 WHERE S2.LAT_N > S1.LAT_N);
