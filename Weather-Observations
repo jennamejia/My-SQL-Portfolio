@@ -1,0 +1,101 @@
+/* This project consists of SQL queries I completed for a series of HackerRank challenges about Weather Observations */
+
+/* Query a list of CITY and STATE from the STATION table. */
+SELECT
+  CITY,
+  STATE
+FROM
+  STATION;
+/* Query the following two values from the STATION table:
+
+The sum of all values in LAT_N rounded to a scale of  decimal places.
+The sum of all values in LONG_W rounded to a scale of  decimal places. */
+SELECT
+    ROUND(SUM(LAT_N), 2) AS lat,
+    ROUND(SUM(LONG_W),2) AS lon
+FROM STATION;
+
+/* Query a list of CITY names from STATION for cities that have an even ID number. Print the results in any order, but exclude duplicates from the answer. */
+SELECT
+  DISTINCT CITY
+FROM
+  STATION
+WHERE MOD(ID, 2) = 0;
+
+/* Find the difference between the total number of CITY entries in the table and the number of distinct CITY entries in the table. */
+SELECT
+  COUNT(CITY)-COUNT(DISTINCT CITY) AS Difference
+FROM
+  STATION
+
+/* Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths (i.e.: number of characters in the name). If there is more than one smallest or largest city, choose the one that comes first when ordered alphabetically. */
+SELECT
+  MIN(CITY) AS shortest,
+  LEN(MIN(CITY)) AS shortest_length,
+  MAX(CITY) AS longest,
+  LEN(MAX(CITY)) AS longest_length
+FROM
+  STATION
+ORDER BY NAME
+
+/* Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths (i.e.: number of characters in the name). If there is more than one smallest or largest city, choose the one that comes first when ordered alphabetically. */
+SELECT
+  CITY,
+  LENGTH(CITY)
+FROM
+  STATION
+ORDER BY
+  Length(CITY) asc, CITY
+LIMIT 1; 
+SELECT
+  CITY,
+  LENGTH(CITY)
+FROM
+  STATION
+ORDER BY
+  Length(CITY) desc,
+  CITY
+LIMIT 1; 
+
+/* Query the list of CITY names from STATION that either do not start with vowels or do not end with vowels. Your result cannot contain duplicates. */
+SELECT
+  DISTINCT CITY
+FROM
+  STATION
+WHERE NOT LEFT (CITY, 1) IN ('A','E','I','O','U')
+OR NOT RIGHT (CITY, 1) IN ('a','e','i','o','u');
+
+/* Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than  and less than . Truncate your answer to  decimal places. */
+SELECT
+  ROUND(SUM(LAT_N),4)
+FROM
+  STATION
+WHERE
+  LAT_N BETWEEN 38.7880 AND 137.2345;
+
+/* Query the greatest value of the Northern Latitudes (LAT_N) from STATION that is less than . Truncate your answer to  decimal places. */
+SELECT
+    ROUND(MAX(LAT_N), 4)
+FROM
+  STATION
+WHERE
+  LAT_N < 137.2345;
+
+/* Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) in STATION that is less than . Round your answer to  decimal places. */
+SELECT
+  ROUND(LONG_W, 4)
+FROM
+  STATION
+WHERE
+  LAT_N < 137.2345
+ORDER BY
+  LAT_N DESC
+LIMIT 1;
+
+/* continued */
+
+
+
+
+
+
