@@ -1,0 +1,142 @@
+/*
+For this SQL project, I queried a dataset called 'Mental Health in Tech Survey', which measures attitudes and frequency of mental health disorders in the tech workplace in 2014.
+
+Data from: https://www.kaggle.com/datasets/osmi/mental-health-in-tech-survey
+*/
+
+/* First, I cleaned the gender column to remove unspecified or non-standard gender values */
+
+-- Update gender values to standardize cases
+UPDATE mental_health
+SET gender = 
+  CASE 
+    WHEN LOWER(TRIM(gender)) IN ('female', 'f', 'queer/she/they', 'cis female', 'woman', 'femake', 'cis-female/femme', 'femail', 'trans woman', 'female (trans)', 'female (cis)') THEN 'Female'
+    WHEN LOWER(TRIM(gender)) IN ('male', 'm', 'maile', 'cis male', 'make', 'mal', 'male (cis)', 'man', 'msle', 'mail', 'cis male', 'malr', 'cis man') THEN 'Male'
+    ELSE NULL
+  END;
+
+DELETE FROM mental_health
+WHERE gender IS NULL;
+
+SELECT * FROM mental_health;
+
+/* Additionally, I deleted any survey submissions that reported ages < 0 */
+DELETE FROM mental_health
+WHERE age < 0;
+
+/* This query outputs the number of submissions by gender */
+SELECT
+	gender,
+	COUNT(*) AS number_of_people
+FROM mental_health
+GROUP BY gender;
+-- According to our output, there are 987 Male submissions and 252 Female submissions.
+
+/* This query orders the survey submissions chronologically */
+SELECT *
+FROM mental_health
+ORDER BY timestamp;
+
+/* This query outputs the number of submissions from each country in descending order */
+SELECT
+	country,
+	COUNT(country) AS submissions
+FROM mental_health
+GROUP BY country
+ORDER BY submissions DESC;
+-- According to our output, the countries with the most amount of submissions were the United States and United Kingdom.
+
+/* This query outputs the number of submissions each month */
+SELECT
+	EXTRACT(MONTH FROM timestamp) AS submission_month,
+	COUNT(EXTRACT(MONTH FROM timestamp)) AS submissions
+FROM mental_health
+GROUP BY submission_month
+ORDER BY submissions DESC;
+-- According to our output, the month with the most amount of submissions is August.
+
+/* This query outputs the number of submissions by age group */
+SELECT
+	CASE
+		WHEN age < 12 THEN 'Children'
+		WHEN age BETWEEN 13 AND 17 THEN 'Adolescents'
+		WHEN age BETWEEN 18 AND 64 THEN 'Adults'
+		ELSE '65 and Over'
+	END AS age_group,
+	COUNT(*) AS number_of_people
+FROM mental_health
+GROUP BY
+	CASE
+		WHEN age < 12 THEN 'Children'
+		WHEN age BETWEEN 13 AND 17 THEN 'Adolescents'
+		WHEN age BETWEEN 18 AND 64 THEN 'Adults'
+		ELSE '65 and Over'
+	END
+ORDER BY
+	MIN(age);
+-- Almost the majority of submissions were submitted by people ages 18-64 (Adults).
+
+/* This query outputs the percentage of responses to the question: "Does your employer provide resources to learn more about mental health issues and how to seek help?" */
+SELECT 
+    seek_help,
+    ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM mental_health)),2) AS percentage
+FROM mental_health
+GROUP BY seek_help
+ORDER BY percentage desc;
+-- More than half of the cases denied their employers providing resources to learn more about mental health issues and ways to seek help.
+
+/* This query outputs the percentage of responses to the question: "Have you sought treatment for a mental health condition */
+	treatment,
+	ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM mental_health)),2) AS percentage
+FROM mental_health
+GROUP BY treatment
+ORDER BY percentage DESC;
+-- According to our output, the results were nearly split between those who answered 'yes' and those who answered 'no' to seeking mental health treatment.
+
+/* This query outputs the percentage of responses to the question: "Does your employer provide mental health benefits?" */
+SELECT
+	benefits,
+	ROUND((COUNT(*) * 100.0 / (SELECT COUNT (*) FROM mental_health)),2) AS percentage
+FROM mental_health
+GROUP BY benefits
+ORDER BY percentage DESC;
+-- According to our output 37.69% of our responses answered 'Yes', 32.61% answered 'Don't know', and 29.70% answered 'No' to having been provided mental health benefits.
+
+/* This query outputs the percentage of responses to the question: "Would you bring up a mental health issue with a potential employer in an interview?" */
+SELECT
+	mental_health_interview,
+	ROUND((COUNT(*) * 100.0 / (SELECT COUNT (*) FROM mental_health)),2) AS percentage
+FROM mental_health
+GROUP BY mental_health_interview
+ORDER BY percentage DESC;
+-- According to our output, over 80% of the responses deny that they would bring up a mental health issue with a potential employer in an interview.
+
+/* This query outputs the percentage of responses to the question: "Do you feel that your employer takes mental health as seriously as physical health?" */
+SELECT
+	mental_vs_physical,
+	ROUND((COUNT(*) * 100.0 / (SELECT COUNT (*) FROM mental_health)),2) AS percentage
+FROM mental_health
+GROUP BY mental_vs_physical
+ORDER BY percentage DESC;
+-- According to our output, 46.09% are unsure if their employer take mental health as seriously as physical health.
+
+/* Have you heard of or observed negative consequences for coworkers with mental health conditions in your workplace? */
+SELECT
+	obs_consequence,
+	ROUND((COUNT(*) * 100.0 / (SELECT COUNT (*) FROM mental_health)),2) AS percentage
+FROM mental_health
+GROUP BY obs_consequence
+ORDER BY percentage DESC;
+-- According to our output, over 85% are unfamiliar with observed negative consequences for coworkers with mental health conditions in the workplace.
+
+/* This query outputs the submission comments that are not null	*/
+SELECT
+	timestamp,
+	age,
+	gender,
+	country,
+	state,
+	comments
+FROM mental_health
+WHERE NOT comments = 'NA';
+
