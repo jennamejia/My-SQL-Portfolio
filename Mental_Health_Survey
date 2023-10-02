@@ -86,6 +86,7 @@ ORDER BY percentage desc;
 -- More than half of the cases denied their employers providing resources to learn more about mental health issues and ways to seek help.
 
 /* This query outputs the percentage of responses to the question: "Have you sought treatment for a mental health condition */
+SELECT
 	treatment,
 	ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM mental_health)),2) AS percentage
 FROM mental_health
