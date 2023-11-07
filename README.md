@@ -1,5 +1,5 @@
 # Jenna Mejia's SQL Portfolio
-Hello! This repository contains examples of SQL I've written for solo projects while working with PostgreSQL and other data analytics courses. Feel free to take a look around and [reach out ](www.linkedin.com/in/jennamejia) if you have any feedback or questions.
+Hello! This repository contains examples of SQL and some Python I've written for solo projects while working with PostgreSQL, MySQL, Jupyter and other data analytics courses. Feel free to take a look around and [reach out ](www.linkedin.com/in/jennamejia) if you have any feedback or questions.
 
 ## Highlighted Projects
 - **Insurance Claim Project**- [Python](https://github.com/jennamejia/My-SQL-Portfolio/blob/main/Insurance%20Claim%20Project.py): Utilized Python to conduct an exploratory data analysis on a Health Insurance Claim dataset, using Boxplots, as well as Group by, Aggregating, and crosstabs in Pandas
