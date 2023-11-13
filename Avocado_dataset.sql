@@ -1,3 +1,9 @@
+/*
+For this project I queried retail scan data on avocados sold in the US in 2018, utilizing aggregate and mathematical functions
+
+Data from Kaggle: https://www.kaggle.com/datasets/neuromusic/avocado-prices
+*/
+
 SELECT * FROM sql_projects.avocado where region='TotalUS';
 
 -- The most to least sold avocados by specific region
